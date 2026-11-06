@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sóz-Qazyna — Бастауыш сынып мұғаліміне арналған платформа</title>
+<style>
+:root{
+  --bg:#0a0f1e; --card:#141d38;
+  --gold:#f0b429; --gold2:#ffd97a; --teal:#2dd4bf; --teal2:#5eead4;
+  --red:#f87171; --green:#4ade80;
+  --text:#eef2ff; --muted:#94a3c7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:'Segoe UI',Tahoma,Arial,sans-serif;
+  background:radial-gradient(1200px 600px at 80% -10%,rgba(45,212,191,.12),transparent),
+             radial-gradient(900px 500px at 10% 110%,rgba(240,180,41,.10),transparent),
+             var(--bg);
+  color:var(--text); min-height:100vh;
+}
+h1,h2,h3,.serif{font-family:Georgia,'Times New Roman',serif}
+button{font-family:inherit;cursor:pointer}
+
+header{position:sticky;top:0;z-index:50;background:rgba(10,15,30,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(240,180,41,.18)}
+.hwrap{max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.logo{font-size:22px;color:var(--gold)}
+.logo span{color:var(--teal)}
+.logo small{display:block;font-size:10px;color:var(--muted);letter-spacing:2px;font-family:'Segoe UI',sans-serif}
+nav{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+nav button{background:none;border:none;color:var(--muted);font-size:14px;padding:9px 13px;border-radius:10px;transition:.25s}
+nav button:hover{color:var(--text);background:rgba(255,255,255,.06)}
+nav button.active{color:#0a0f1e;background:linear-gradient(135deg,var(--gold),var(--gold2));font-weight:700;box-shadow:0 4px 16px rgba(240,180,41,.35)}
+
+main{max-width:1100px;margin:0 auto;padding:34px 20px 80px}
+.screen{display:none;animation:fade .45s ease}
+.screen.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- Hero / home ---------- */
+.hero{text-align:center;padding:48px 10px 40px}
+.hero .orn{color:var(--gold);letter-spacing:10px}
+.hero h1{font-size:clamp(36px,7vw,66px);margin:12px 0;
+  background:linear-gradient(115deg,#fff 5%,var(--gold2) 40%,var(--teal2) 90%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);max-width:660px;margin:0 auto 30px;line-height:1.7;font-size:17px}
+.note{display:inline-block;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.3);color:var(--teal2);
+  padding:12px 22px;border-radius:14px;font-size:14px;margin-bottom:36px}
+.grade-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.grade-card{background:var(--card);border:1px solid rgba(240,180,41,.18);border-radius:20px;padding:26px 22px;cursor:pointer;transition:.25s;text-align:center}
+.grade-card:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 14px 36px rgba(0,0,0,.5)}
+.grade-card .gnum{font-size:44px;font-family:Georgia,serif;color:var(--gold2)}
+.grade-card h3{margin:8px 0}
+.grade-card p{color:var(--muted);font-size:13px;line-height:1.6}
+
+/* ---------- Section / topics ---------- */
+h2.sec-title{font-size:32px;color:var(--gold2);margin-bottom:6px}
+.sec-sub{color:var(--muted);margin-bottom:24px;line-height:1.6}
+.gtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.gtabs button{background:var(--card);border:1px solid rgba(240,180,41,.25);color:var(--muted);padding:10px 20px;border-radius:999px;font-size:14px;transition:.25s}
+.gtabs button.on{color:#0a0f1e;background:linear-gradient(135deg,var(--gold),var(--gold2));font-weight:700;border-color:transparent}
+.gtopic{display:none}
+.gtopic.show{display:block;animation:fade .4s ease}
+.grid{display:grid;gap:14px}
+.g5{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+
+/* ---------- Rule box ---------- */
+.rule{background:linear-gradient(150deg,rgba(240,180,41,.12),rgba(240,180,41,.03));border:1px solid rgba(240,180,41,.35);
+  border-left:5px solid var(--gold);border-radius:14px;padding:20px 22px;margin-bottom:26px;line-height:1.7}
+.rule b.tag{display:inline-block;background:var(--gold);color:#0a0f1e;font-size:11px;letter-spacing:2px;padding:3px 12px;border-radius:99px;margin-bottom:10px}
+.rule p{font-size:15px}
+.rule .ex{color:var(--teal2);font-family:Georgia,serif;font-size:17px;margin-top:8px}
+
+/* ---------- Letters ---------- */
+.letter-card{background:var(--card);border:1px solid rgba(94,234,212,.15);border-radius:16px;padding:16px 8px;text-align:center;cursor:pointer;transition:.25s;position:relative}
+.letter-card:hover{transform:translateY(-5px);border-color:var(--teal);box-shadow:0 10px 26px rgba(45,212,191,.25)}
+.letter-card .l{font-size:38px;font-family:Georgia,serif;color:var(--gold2)}
+.letter-card .w{font-size:12px;color:var(--muted);margin-top:5px}
+.letter-card.special .l{color:var(--teal2)}
+.letter-card.dim{opacity:.28}
+.letter-card.hi-v{border-color:var(--green);box-shadow:0 0 18px rgba(74,222,128,.35)}
+.letter-card.hi-c{border-color:var(--teal);box-shadow:0 0 18px rgba(45,212,191,.35)}
+.letter-card .sound{position:absolute;top:7px;right:9px;font-size:12px;opacity:.5}
+
+/* ---------- Colors ---------- */
+.color-card{background:var(--card);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:18px;text-align:center;cursor:pointer;transition:.25s}
+.color-card:hover{transform:translateY(-5px)}
+.color-card .sw{width:74px;height:74px;border-radius:50%;margin:0 auto 10px;border:3px solid rgba(255,255,255,.35);transition:.25s}
+.color-card.pop .sw{transform:scale(1.15);box-shadow:0 0 26px rgba(255,255,255,.4)}
+.color-card .nm{font-family:Georgia,serif;font-size:19px;color:var(--gold2)}
+
+/* ---------- Syllables ---------- */
+.word-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.word-btns button{background:var(--card);border:1px solid rgba(94,234,212,.3);color:var(--text);padding:10px 20px;border-radius:12px;font-size:17px;font-family:Georgia,serif;transition:.2s}
+.word-btns button:hover{border-color:var(--teal);transform:translateY(-2px)}
+.syll-out{display:flex;gap:14px;flex-wrap:wrap;min-height:90px;align-items:center}
+.syl{background:linear-gradient(150deg,var(--teal2),var(--teal));color:#032726;font-family:Georgia,serif;font-size:34px;font-weight:700;
+  padding:16px 24px;border-radius:16px;animation:pop .45s ease backwards;box-shadow:0 8px 22px rgba(45,212,191,.35)}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
+
+/* ---------- Numbers ---------- */
+.num-card{background:var(--card);border:1px solid rgba(240,180,41,.2);border-radius:18px;padding:18px 10px;text-align:center;cursor:pointer;transition:.25s}
+.num-card:hover{transform:translateY(-5px);border-color:var(--gold)}
+.num-card .n{font-size:40px;font-family:Georgia,serif;color:var(--gold2)}
+.num-card .w{font-size:15px;color:var(--teal2);margin-top:4px;font-family:Georgia,serif}
+
+/* ---------- Flashcards ---------- */
+.fc-stage{display:flex;flex-direction:column;align-items:center;gap:20px}
+.fcard{width:min(400px,92vw);height:240px;perspective:1200px;cursor:pointer}
+.fcard.sm{width:210px;height:150px}
+.fc-in{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.2,.8,.3,1);transform-style:preserve-3d}
+.fcard.flip .fc-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid rgba(240,180,41,.25)}
+.face.front{background:linear-gradient(150deg,#1a2450,var(--card))}
+.face.back{background:linear-gradient(150deg,#0b3f3a,#123c37);transform:rotateY(180deg)}
+.face .kk{font-size:40px;font-family:Georgia,serif;color:var(--gold2)}
+.fcard.sm .face .kk{font-size:24px}
+.face .em{font-size:56px}
+.face .tr{font-size:24px;color:var(--teal2)}
+.face .cls{font-size:19px;color:var(--teal2);font-weight:700}
+.face .hint{position:absolute;bottom:12px;font-size:11px;color:var(--muted)}
+.fc-ctrl{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center}
+.btn{background:var(--card);border:1px solid rgba(94,234,212,.3);color:var(--text);padding:11px 22px;border-radius:12px;font-size:14px;transition:.25s}
+.btn:hover{border-color:var(--teal);transform:translateY(-2px)}
+.btn.gold{border-color:var(--gold);color:var(--gold2)}
+.btn.gold:hover{background:rgba(240,180,41,.12)}
+.fc-counter{color:var(--muted);font-size:13px}
+.cta{display:inline-block;background:linear-gradient(135deg,var(--teal),#0d9488);color:#032726;border:none;font-size:15px;font-weight:700;
+  padding:13px 30px;border-radius:14px;transition:.25s;box-shadow:0 8px 24px rgba(45,212,191,.3)}
+.cta:hover{transform:translateY(-3px)}
+
+/* ---------- Quiz ---------- */
+.qbox{background:var(--card);border:1px solid rgba(240,180,41,.18);border-radius:20px;padding:26px;max-width:640px;margin:18px auto 0}
+.qtext{font-size:19px;margin-bottom:20px;line-height:1.5}
+.qmeta{color:var(--muted);font-size:13px;margin-bottom:14px}
+.opts{display:grid;gap:11px}
+.opt{text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(148,163,199,.25);color:var(--text);padding:13px 17px;border-radius:12px;font-size:16px;transition:.2s}
+.opt:hover:not(:disabled){border-color:var(--teal);background:rgba(45,212,191,.08)}
+.opt.ok{background:rgba(74,222,128,.15);border-color:var(--green)}
+.opt.bad{background:rgba(248,113,113,.15);border-color:var(--red)}
+.big-result{text-align:center;padding:16px 0}
+.big-result .num{font-size:56px;font-family:Georgia,serif;color:var(--gold2)}
+
+/* ---------- Memory match (antonyms) ---------- */
+.mm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:12px;max-width:720px}
+.mm-card{background:linear-gradient(150deg,#1a2450,var(--card));border:1px solid rgba(94,234,212,.25);border-radius:14px;
+  height:74px;display:flex;align-items:center;justify-content:center;font-size:19px;font-family:Georgia,serif;color:var(--gold2);cursor:pointer;transition:.3s;user-select:none}
+.mm-card span{pointer-events:none}
+.mm-card.open{background:linear-gradient(150deg,#134e4a,#0b3f3a);border-color:var(--teal);color:var(--teal2);transform:rotateY(360deg)}
+.mm-card.found{background:rgba(74,222,128,.14);border-color:var(--green);color:var(--green);opacity:.75;pointer-events:none}
+
+/* ---------- Plural demo ---------- */
+.plural-grid{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.plural-grid button{background:var(--card);border:1px solid rgba(94,234,212,.3);color:var(--text);padding:10px 18px;border-radius:12px;font-size:16px;font-family:Georgia,serif;transition:.2s}
+.plural-grid button:hover{border-color:var(--teal)}
+.plural-out{min-height:86px;font-family:Georgia,serif;font-size:36px;color:var(--gold2);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.plural-out .arrow{color:var(--muted)}
+.plural-out .res{color:var(--teal2);animation:pop .5s ease}
+
+/* ---------- Cases table ---------- */
+table.cases{width:100%;border-collapse:collapse;background:var(--card);border-radius:16px;overflow:hidden;margin-bottom:26px}
+table.cases th{background:rgba(240,180,41,.15);color:var(--gold2);padding:12px;font-size:14px;text-align:left}
+table.cases td{padding:11px 12px;border-top:1px solid rgba(255,255,255,.07);font-size:14px}
+table.cases td:first-child{color:var(--teal2);font-weight:700}
+table.cases td:nth-child(2){color:var(--gold2);font-family:Georgia,serif}
+
+/* ---------- Game ---------- */
+.game-wrap{max-width:560px;margin:0 auto;text-align:center}
+.streak{display:flex;gap:26px;justify-content:center;margin-bottom:20px;flex-wrap:wrap}
+.streak div b{font-size:24px;color:var(--teal2)}
+.scramble{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:22px 0}
+.tile{width:54px;height:62px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;font-family:Georgia,serif;color:#0a0f1e;font-weight:700;
+  background:linear-gradient(150deg,var(--gold2),var(--gold));box-shadow:0 6px 16px rgba(240,180,41,.35);animation:pop .5s ease backwards}
+.tile.t2{background:linear-gradient(150deg,var(--teal2),var(--teal));box-shadow:0 6px 16px rgba(45,212,191,.35)}
+.ginput{width:100%;max-width:380px;padding:13px 18px;font-size:20px;text-align:center;background:rgba(255,255,255,.05);border:1px solid rgba(94,234,212,.35);border-radius:14px;color:var(--text);font-family:Georgia,serif;outline:none}
+.ginput:focus{border-color:var(--teal);box-shadow:0 0 0 4px rgba(45,212,191,.15)}
+.game-msg{min-height:28px;margin:13px 0;font-size:16px}
+.game-msg.good{color:var(--green)} .game-msg.err{color:var(--red)}
+
+.confetti{position:fixed;top:-10px;width:10px;height:16px;z-index:999;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:.6}}
+footer{border-top:1px solid rgba(240,180,41,.15);text-align:center;padding:24px;color:var(--muted);font-size:13px}
+footer b{color:var(--gold)}
+@media(max-width:640px){.hwrap{justify-content:center}nav{margin:0}}
+.lang-btn{background:rgba(45,212,191,.12);border:1px solid var(--teal);color:var(--teal2);padding:8px 16px;border-radius:999px;font-size:13px;font-weight:700;transition:.25s}
+.lang-btn:hover{background:rgba(45,212,191,.25)}
+.wcard{background:var(--card);border:1px solid rgba(240,180,41,.2);border-radius:18px;padding:18px 10px;text-align:center;cursor:pointer;transition:.25s}
+.wcard:hover{transform:translateY(-5px);border-color:var(--gold)}
+.wcard .em{font-size:38px}
+.wcard .k{font-size:22px;font-family:Georgia,serif;color:var(--gold2);margin-top:4px}
+.wcard .r{display:none;font-size:13px;color:var(--teal2);margin-top:4px}
+body.ru .wcard .r{display:block}
+.menu-btn{margin-left:auto;background:rgba(255,255,255,.06);border:1px solid rgba(240,180,41,.35);color:var(--gold2);width:44px;height:44px;border-radius:12px;font-size:22px;transition:.25s}
+.menu-btn:hover{background:rgba(240,180,41,.18)}
+#side{position:fixed;top:0;left:0;bottom:0;width:290px;max-width:84vw;background:#0d1530;border-right:1px solid rgba(240,180,41,.25);z-index:100;transform:translateX(-105%);transition:transform .3s ease;padding:20px 16px;display:flex;flex-direction:column;gap:14px;overflow-y:auto;box-shadow:12px 0 40px rgba(0,0,0,.5)}
+#side.open{transform:none}
+#side .side-top{display:flex;align-items:center;justify-content:space-between;color:var(--gold2);font-family:Georgia,serif;font-size:20px}
+#side .side-top button{background:none;border:none;color:var(--muted);font-size:24px}
+#side nav{flex-direction:column;margin:0;gap:6px}
+#side nav button{text-align:left;width:100%;font-size:16px;padding:12px 14px}
+#side .lang-btn{width:100%;padding:12px;margin-top:auto;font-size:15px}
+#ovl{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:90;opacity:0;pointer-events:none;transition:.3s}
+#ovl.show{opacity:1;pointer-events:auto}
+.quotes-title{text-align:center;font-size:26px;color:var(--gold2);margin:6px 0 20px}
+.quote-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px;text-align:left}
+.quote-card{background:var(--card);border:1px solid rgba(240,180,41,.2);border-left:5px solid var(--gold);border-radius:18px;padding:24px 22px;position:relative}
+.quote-card:before{content:"“";position:absolute;top:2px;right:16px;font-size:70px;font-family:Georgia,serif;color:rgba(240,180,41,.18)}
+.quote-card .qt{font-family:Georgia,serif;font-size:20px;line-height:1.5;color:var(--text)}
+.quote-card .qa{margin-top:14px;color:var(--teal2);font-size:14px;font-weight:700}
+.quote-card .qd{color:var(--muted);font-size:12px;margin-top:2px}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <div class="logo">Sóz-Qazyna<span>.</span><small>БАСТАУЫШ СЫНЫП МҰҒАЛІМІНЕ АРНАЛҒАН</small></div>
+    <button class="menu-btn" onclick="toggleMenu()" aria-label="Меню">☰</button>
+  </div>
+</header>
+<div id="ovl" onclick="toggleMenu(false)"></div>
+<aside id="side"><div class="side-top"><span>Sóz-Qazyna</span><button onclick="toggleMenu(false)" aria-label="Жабу">✕</button></div>
+<nav id="nav">
+      <button data-s="home" class="active">Басты бет</button>
+      <button data-s="g1">1-сынып</button>
+      <button data-s="g2">2-сынып</button>
+      <button data-s="g3">3-сынып</button>
+      <button data-s="g4">4-сынып</button>
+      <button data-s="logic">Логика</button>
+      <button data-s="game">Ойын</button>
+    </nav>
+<button class="lang-btn" id="langBtn" onclick="toggleLang()">🌐 Русский</button></aside>
+
+<main>
+
+<!-- ============ HOME ============ -->
+<section class="screen active" id="s-home">
+  <div class="hero">
+    <div class="orn">✦ ✦ ✦</div>
+    <h1>Sóz-Qazyna</h1>
+    <p>Бастауыш сынып оқушыларына арналған қазақ тілі платформасы. Әр сыныпқа бөлек тақырыптар: ереже, интерактивті түсіндіру және сыныппен бірге орындалатын жаттығулар.</p>
+    <div class="note">💡 Мұғалімге: сол жақтағы ☰ мәзірін ашып, сыныпты таңдаңыз → ережені оқып, тапсырмаларды бірге орындаңыз. Тіркеусіз жұмыс істейді.</div>
+    <h2 class="quotes-title serif" data-ru="Мудрые слова">Дана сөздер</h2>
+    <div class="quote-grid">
+      <div class="quote-card"><div class="qt" data-ru="«Гнев — враг, разум — друг, к своему разуму добавь ещё разум.»">«Ашу — дұшпан, ақыл — дос, ақылыңа ақыл қос.»</div><div class="qa" data-ru="Абай Кунанбаев">Абай Құнанбайұлы</div><div class="qd" data-ru="поэт, мыслитель">ақын, ойшыл</div></div>
+      <div class="quote-card"><div class="qt" data-ru="«Не хвались, не обретя знаний, не красуйся без повода.»">«Ғылым таппай мақтанба, орынсызға баптанба.»</div><div class="qa" data-ru="Абай Кунанбаев">Абай Құнанбайұлы</div><div class="qd" data-ru="поэт, мыслитель">ақын, ойшыл</div></div>
+      <div class="quote-card"><div class="qt" data-ru="«Стих — царь слов, их отборная суть.»">«Өлең — сөздің патшасы, сөз сарасы.»</div><div class="qa" data-ru="Абай Кунанбаев">Абай Құнанбайұлы</div><div class="qd" data-ru="поэт, мыслитель">ақын, ойшыл</div></div>
+      <div class="quote-card"><div class="qt" data-ru="«Идёмте, дети, учиться!»">«Кел, балалар, оқылық!»</div><div class="qa" data-ru="Ибрай Алтынсарин">Ыбырай Алтынсарин</div><div class="qd" data-ru="просветитель, писатель">ағартушы, жазушы</div></div>
+      <div class="quote-card"><div class="qt" data-ru="«Я верю в молодёжь!»">«Мен жастарға сенемін!»</div><div class="qa" data-ru="Магжан Жумабаев">Мағжан Жұмабаев</div><div class="qd" data-ru="поэт">ақын</div></div>
+      <div class="quote-card"><div class="qt" data-ru="«Язык — это орудие.»">«Тіл — құрал.»</div><div class="qa" data-ru="Ахмет Байтурсынулы">Ахмет Байтұрсынұлы</div><div class="qd" data-ru="языковед, просветитель">тіл маманы, ағартушы</div></div>
+    </div>
+    <div style="margin-top:22px"><button class="btn gold" onclick="newQuotes()" data-ru="🔄 Другие слова">🔄 Басқа сөздер</button></div>
+  </div>
+</section>
+
+<!-- ============ 1-сынып ============ -->
+<section class="screen" id="s-g1">
+  <h2 class="sec-title">1-сынып</h2>
+  <p class="sec-sub">Дыбыстар мен әріптерді тану, дауысты/дауыссыз дыбыстар, түстер, отбасы, апта күндері.</p>
+  <div class="gtabs">
+    <button class="on" onclick="gtab(this,'s-g1',0)">🔤 Әліппе</button>
+    <button onclick="gtab(this,'s-g1',1)">🗣️ Дауысты дыбыстар</button>
+    <button onclick="gtab(this,'s-g1',2)">🎨 Түстер</button>
+    <button onclick="gtab(this,'s-g1',3)" data-ru="👪 Семья">👪 Отбасы</button>
+    <button onclick="gtab(this,'s-g1',4)" data-ru="📅 Дни недели">📅 Апта күндері</button>
+  </div>
+
+  <div class="gtopic show">
+    <div class="rule"><b class="tag">ЕРЕЖЕ</b><p>Қазақ әліпбиінде <b>42 әріп</b> бар. Әріп — дыбыстың таңбасы. Әріпті басып, онымен басталатын сөзді тыңдаңыз.</p>
+    <p class="ex">Мысалы: Қ — қала, М — мектеп</p></div>
+    <div class="grid g5" id="alphaG1"></div>
+  </div>
+
+  <div class="gtopic">
+    <div class="rule"><b class="tag">ЕРЕЖЕ</b><p>Дыбыстар екіге бөлінеді: <b style="color:var(--green)">дауысты</b> (ауа ұшынып, дауыс қатысады) және <b style="color:var(--teal2)">дауыссыз</b> дыбыстар.</p>
+    <p class="ex">Дауысты: А, Ә, Е, И, О, Ө, У, Ұ, Ү, Ы, І — барлығы 11</p></div>
+    <div class="gtabs" style="margin-bottom:18px">
+      <button class="on" onclick="vowMode('all',this)">Барлығы</button>
+      <button onclick="vowMode('v',this)">Дауысты дыбыстар 🟢</button>
+      <button onclick="vowMode('c',this)">Дауыссыз дыбыстар 🔵</button>
+    </div>
+    <div class="grid g5" id="alphaG1b"></div>
+  </div>
+
+  <div class="gtopic">
+    <div class="rule"><b class="tag">ЕРЕЖЕ</b><p>Түстер — заттың сыртқы белгісі. Түсті басып, атауын тыңдаңыз.</p>
+    <p class="ex">Мысалы: аспан — көк, күн — сары</p></div>
+    <div class="grid g4" id="colorGrid"></div>
+  </div>
+
+  <div class="gtopic"><div class="rule"><b class="tag">ЕРЕЖЕ</b><p data-ru="Семья — близкие люди, живущие в одном доме. Нажмите на слово и послушайте.">Отбасы — бір үйде тұратын жақын адамдар. Сөзді басып, атауын тыңдаңыз.</p><p class="ex" data-ru="Например: Мен әкемді, анамды жақсы көремін (Я люблю папу и маму).">Мысалы: Мен әкемді, анамды жақсы көремін.</p></div><div class="grid g4" id="famG"></div></div>
+
+  <div class="gtopic"><div class="rule"><b class="tag">ЕРЕЖЕ</b><p data-ru="В неделе 7 дней. Выучим названия дней по порядку.">Аптада 7 күн бар. Күндердің атауын ретімен айтып үйренейік.</p><p class="ex" data-ru="Например: дүйсенбі — первый день недели">Мысалы: дүйсенбі — аптаның бірінші күні</p></div><div class="grid g4" id="dayG"></div></div>
+</section>
+
+<!-- ============ 2-сынып ============ -->
+<section class="screen" id="s-g2">
+  <h2 class="sec-title">2-сынып</h2>
+  <p class="sec-sub">Буындарды айыру, сандар 1–10, жануарлар, жыл мезгілдері, дене мүшелері.</p>
+  <div class="gtabs">
+    <button class="on" onclick="gtab(this,'s-g2',0)">✂️ Буын</button>
+    <button onclick="gtab(this,'s-g2',1)">🔢 Сандар 1–10</button>
+    <button onclick="gtab(this,'s-g2',2)">🐾 Жануарлар</button>
+    <button onclick="gtab(this,'s-g2',3)" data-ru="🍂 Времена года">🍂 Жыл мезгілдері</button>
+    <button onclick="gtab(this,'s-g2',4)" data-ru="🙂 Части тела">🙂 Дене мүшелері</button>
+  </div>
+
+  <div class="gtopic show">
+    <div class="rule"><b class="tag">ЕРЕЖЕ</b><p><b>Буын</b> — дыбыстың бір рет соғылғаннан пайда болатын бірлігі. Әр буында міндетті түрде бір дауысты дыбыс болады.</p>
+    <p class="ex">Мысалы: ба-ла, кі-тап, мек-теп</p></div>
+    <p style="color:var(--muted);margin-bottom:14px">Сөзді басыңыз — ол буындарға бөлініп, дауыста оқылады:</p>
+    <div class="word-btns" id="syllBtns"></div>
+    <div class="syll-out" id="syllOut"><span style="color:var(--muted);font-size:18px;font-family:'Segoe UI'">← Сөзді таңдаңыз</span></div>
+  </div>
+
+  <div class="gtopic">
+    <div class="rule"><b class="tag">ЕРЕЖЕ</b><p>Сан есімдер заттың санын, ретін білдіреді. Санды басып, сөзбен тыңдаңыз.</p>
+    <p class="ex">Мысалы: 5 — бес саусақ</p></div>
+    <div class="grid g5" id="numGrid1"></div>
+  </div>
+
+  <div class="gtopic">
+    <div class="rule"><b class="tag">ЕРЕЖЕ</b><p>Жануарлар атауларын карточкалар арқылы таныймыз. Карточканы бұраңыз.</p></div>
+    <div class="fc-stage">
+      <div class="fcard" id="fcardA" onclick="document.getElementById('fcardA').classList.toggle('flip')">
+        <div class="fc-in">
+          <div class="face front"><div class="kk" id="faKK"></div><div class="hint">↻ Бұру үшін басыңыз</div></div>
+          <div class="face back"><div class="em" id="faEM"></div><div class="tr" id="faRU" style="font-size:16px;margin-top:8px"></div></div>
+        </div>
+      </div>
+      <div class="fc-ctrl">
+        <button class="btn" onclick="aNav(-1)">← Алдыңғы</button>
+        <span class="fc-counter" id="faCnt"></span>
+        <button class="btn" onclick="aNav(1)">Келесі →</button>
+        <button class="btn gold" id="faSpeak" onclick="speak(ANIMALS[ai][0])">🔊 Айту</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="gtopic"><div class="rule"><b class="tag">ЕРЕЖЕ</b><p data-ru="В году четыре времени года: весна, лето, осень, зима. У каждого свои признаки.">Жылда төрт мезгіл бар: көктем, жаз, күз, қыс. Әр мезгілдің өз белгісі бар.</p><p class="ex" data-ru="Например: қыс — идёт снег (қар жауады), жаз — жаркое солнце (күн ыстық)">Мысалы: қыс — қар жауады, жаз — күн ыстық</p></div><div class="grid g4" id="seaG"></div></div>
+
+  <div class="gtopic"><div class="rule"><b class="tag">ЕРЕЖЕ</b><p data-ru="Выучим названия частей тела. Нажмите на слово и послушайте.">Дене мүшелерінің атауларын үйренейік. Мүшені басып, сөзін тыңдаңыз.</p><p class="ex" data-ru="Например: көзбен көреміз (смотрим глазами), құлақпен естиміз (слышим ушами)">Мысалы: көзбен көреміз, құлақпен естиміз</p></div><div class="grid g4" id="bodyG"></div></div>
+</section>
+
+<!-- ============ 3-сынып ============ -->
+<section class="screen" id="s-g3">
+  <h2 class="sec-title">3-сынып</h2>
+  <p class="sec-sub">Көпше түр, қарама-қарсы сөздер, сандар 11–20, етістік шақтары, ай атаулары.</p>
+  <div class="gtabs">
+    <button class="on" onclick="gtab(this,'s-g3',0)">➕ Көпше түр</button>
+    <button onclick="gtab(this,'s-g3',1)">⚖️ Қарама-қарсы сөздер</button>
+    <button onclick="gtab(this,'s-g3',2)">🔢 Сандар 11–20</button>
+    <button onclick="gtab(this,'s-g3',3)" data-ru="⏳ Времена глагола">⏳ Етістік шақтары</button>
+    <button onclick="gtab(this,'s-g3',4)" data-ru="📅 Названия месяцев">📅 Ай атаулары</button>
+  </div>
+
+  <div class="gtopic show">
+    <div class="rule"><b class="tag">ЕРЕЖЕ</b><p>Заттың көп санын білдіретін түр — <b>көпше түр</b>. Сөз түбіне <b>-лар, -лер, -дар, -дер, -тар, -тер</b> жалғаулары қосылады.</p>
+    <p class="ex">қала → қалалар · ит → иттер · ән → әндер</p></div>
+    <p style="color:var(--muted);margin-bottom:14px">Сөзді басыңыз — көпше түрі шығады:</p>
+    <div class="plural-grid" id="pluralBtns"></div>
+    <div class="plural-out" id="pluralOut"><span style="color:var(--muted);font-size:18px;font-family:'Segoe UI'">← Сөзді таңдаңыз</span></div>
+    <div class="qbox" id="qG3" style="max-width:100%;margin-top:26px;text-align:center">
+      <p style="color:var(--muted);margin-bottom:14px">📝 Жаттығу: 5 сұрақ</p>
+      <button class="cta" onclick="startQuiz(buildPluralQuiz(),'Көпше түр','qG3')">Тестті бастау</button>
+    </div>
+  </div>
+
+  <div class="gtopic">
+    <div class="rule"><b class="tag">ЕРЕЖЕ</b><p>Мағынасы қарама-қарсы сөздер — <b>антонимдер</b>. Жұптарды табыңыз.</p>
+    <p class="ex">үлкен — кіші · жылдам — жай</p></div>
+    <p id="mmInfo" style="color:var(--muted);margin-bottom:16px"></p>
+    <div class="mm-grid" id="mmGrid"></div>
+    <div style="text-align:center;margin-top:20px"><button class="btn" onclick="startMM()">🔄 Қайта бастау</button></div>
+  </div>
+
+  <div class="gtopic">
+    <div class="rule"><b class="tag">ЕРЕЖЕ</b><p>11–19 сандары «он» сөзі мен бірліктерді қосып айтылады.</p>
+    <p class="ex">он + бір = он бір · он + төрт = он төрт</p></div>
+    <div class="grid g5" id="numGrid2"></div>
+  </div>
+
+  <div class="gtopic"><div class="rule"><b class="tag">ЕРЕЖЕ</b><p data-ru="Форма глагола, показывающая время действия, — <b>время</b>. Их три: прошедшее, настоящее, будущее.">Етістіктің істің қашан болғанын көрсететін түрі — <b>шақ</b>. Үш шақ бар: өткен, осы, келер.</p></div><table class="cases"><tr><th>Шақ</th><th>Жалғауы</th><th>Сұрағы</th><th>Мысал</th></tr><tr><td data-ru="Прошедшее">Өткен шақ</td><td>-ды, -ді, -ты, -ті</td><td data-ru="Что сделал?">Не істеді?</td><td>Ол кітап оқы<strong>ды</strong>.</td></tr><tr><td data-ru="Настоящее">Осы шақ</td><td>-п жатыр (-ып, -іп жатыр)</td><td data-ru="Что делает?">Не істеп жатыр?</td><td>Ол кітап оқы<strong>п жатыр</strong>.</td></tr><tr><td data-ru="Будущее">Келер шақ</td><td>-мақ, -мек, -бақ, -бек, -пақ, -пек</td><td data-ru="Что собирается делать?">Не істемек?</td><td>Ол ертең кітап оқы<strong>мақ</strong>.</td></tr></table><div class="qbox" id="qG3t" style="max-width:100%;margin-top:26px;text-align:center"><p style="color:var(--muted);margin-bottom:14px" data-ru="📝 Тест: 4 вопроса">📝 Тест: 4 сұрақ</p><button class="cta" onclick="startQuiz(buildBank('tense'),'Етістік шақтары','qG3t')">Тестті бастау</button></div></div>
+
+  <div class="gtopic"><div class="rule"><b class="tag">ЕРЕЖЕ</b><p data-ru="В году 12 месяцев. Выучим их названия по порядку.">Жылда 12 ай бар. Айлардың атауын ретімен айтып үйренейік.</p><p class="ex" data-ru="Например: наурыз — первый месяц весны">Мысалы: наурыз — көктемнің бірінші айы</p></div><div class="grid g4" id="monG"></div></div>
+</section>
+
+<!-- ============ 4-сынып ============ -->
+<section class="screen" id="s-g4">
+  <h2 class="sec-title">4-сынып</h2>
+  <p class="sec-sub">Септік жалғаулары, синонимдер, сөз табы, мақал-мәтелдер, сөйлем түрлері.</p>
+  <div class="gtabs">
+    <button class="on" onclick="gtab(this,'s-g4',0)">🏷️ Септік жалғаулары</button>
+    <button onclick="gtab(this,'s-g4',1)">💬 Синонимдер</button>
+    <button onclick="gtab(this,'s-g4',2)">🧩 Сөз табы</button>
+    <button onclick="gtab(this,'s-g4',3)" data-ru="📜 Пословицы">📜 Мақал-мәтел</button>
+    <button onclick="gtab(this,'s-g4',4)" data-ru="❓ Типы предложений">❓ Сөйлем түрлері</button>
+  </div>
+
+  <div class="gtopic show">
+    <div class="rule"><b class="tag">ЕРЕЖЕ</b><p>Іс-қимылдың кімге, нені, қайда, қашан қатысты екенін білдіретін жалғаулар — <b>септік жалғаулар</b>. Қазақ тілінде 7 септік бар.</p></div>
+    <table class="cases">
+      <tr><th>Септік атауы</th><th>Жалғауы</th><th>Сұрағы</th><th>Мысал</th></tr>
+      <tr><td>Атау</td><td>жалғаусыз</td><td>Кім? Не?</td><td>Мектеп, кітап</td></tr>
+      <tr><td>Ілік</td><td>-ның, -нің, -дың, -дің, -тың, -тің</td><td>Кімнің? Ненің?</td><td>Айгүл<strong>дің</strong> кітабы</td></tr>
+      <tr><td>Барыс</td><td>-қа, -ке, -ға, -ге, -на, -не</td><td>Кімге? Неге?</td><td>Мектеп<strong>ке</strong> барамын</td></tr>
+      <tr><td>Табыс</td><td>-ны, -ні, -ды, -ді, -ты, -ті</td><td>Кімді? Нені?</td><td>Кітап<strong>ты</strong> оқимын</td></tr>
+      <tr><td>Жатыс</td><td>-да, -де, -та, -те</td><td>Кімде? Неде?</td><td>Үй<strong>де</strong> отырмын</td></tr>
+      <tr><td>Шығыс</td><td>-дан, -ден, -тан, -тен, -нан, -нен</td><td>Кімнен? Неден?</td><td>Мектеп<strong>тен</strong> келдім</td></tr>
+      <tr><td>Көмектес</td><td>-мен, -бен, -пен</td><td>Кіммен? Немен?</td><td>Досым<strong>мен</strong> ойнаймын</td></tr>
+    </table>
+    <div class="qbox" id="qG4c" style="max-width:100%;margin-top:0;text-align:center">
+      <p style="color:var(--muted);margin-bottom:14px">📝 Бос орынды толтырыңыз: 5 сұрақ</p>
+      <button class="cta" onclick="startQuiz(buildCaseQuiz(),'Септік жалғаулары','qG4c')">Тестті бастау</button>
+    </div>
+  </div>
+
+  <div class="gtopic">
+    <div class="rule"><b class="tag">ЕРЕЖЕ</b><p>Мағынасы жақын, біріне-бірі алмастырыла алатын сөздер — <b>синонимдер</b>.</p>
+    <p class="ex">жылдам — тез · әдемі — сұлу · дос — жолдас</p></div>
+    <div class="qbox" id="qG4s" style="max-width:100%;text-align:center">
+      <p style="color:var(--muted);margin-bottom:14px">📝 Тест: 5 сұрақ</p>
+      <button class="cta" onclick="startQuiz(buildSynQuiz(),'Синонимдер','qG4s')">Тестті бастау</button>
+    </div>
+  </div>
+
+  <div class="gtopic">
+    <div class="rule"><b class="tag">ЕРЕЖЕ</b><p>Сөздер мағынасына қарай топтарға бөлінеді: <b>зат есім</b> (Не? Қайсы?), <b>сын есім</b> (Қандай?), <b>сан есім</b> (Қанша?), <b>етістік</b> (Не істеді?). Карточканы басып тексеріңіз.</p></div>
+    <div class="grid g4" id="wcGrid"></div>
+  </div>
+
+  <div class="gtopic"><div class="rule"><b class="tag">ЕРЕЖЕ</b><p data-ru="Пословицы и поговорки — народная мудрость, накопленная веками. Закончите пословицу.">Мақал-мәтел — халықтың ғасырлар бойы жинаған даналығы. Мақалды аяқтаңыз.</p><p class="ex" data-ru="Например: Жақсы сөз — жарым ырыс (Хорошее слово — половина счастья)">Мысалы: Жақсы сөз — жарым ырыс</p></div><div class="qbox" id="qG4p" style="max-width:100%;margin-top:26px;text-align:center"><p style="color:var(--muted);margin-bottom:14px" data-ru="📝 Тест: 5 вопросов">📝 Тест: 5 сұрақ</p><button class="cta" onclick="startQuiz(buildBank('prov'),'Мақал-мәтел','qG4p')">Тестті бастау</button></div></div>
+
+  <div class="gtopic"><div class="rule"><b class="tag">ЕРЕЖЕ</b><p data-ru="По цели высказывания предложения делятся на три вида: <b>повествовательные</b>, <b>вопросительные</b>, <b>восклицательные</b>.">Сөйлем айтылу мақсатына қарай үшке бөлінеді: <b>хабарлы</b>, <b>сұраулы</b>, <b>лепті</b>.</p></div><table class="cases"><tr><th>Сөйлем түрі</th><th>Тыныс белгісі</th><th>Мысал</th></tr><tr><td data-ru="Повествовательное">Хабарлы</td><td data-ru="точка ( . )">нүкте ( . )</td><td>Бүгін ауа райы жақсы<strong>.</strong></td></tr><tr><td data-ru="Вопросительное">Сұраулы</td><td data-ru="вопросительный знак ( ? )">сұрақ белгісі ( ? )</td><td>Сен қайда барасың<strong>?</strong></td></tr><tr><td data-ru="Восклицательное">Лепті</td><td data-ru="восклицательный знак ( ! )">леп белгісі ( ! )</td><td>Қандай әдемі күз<strong>!</strong></td></tr></table><div class="qbox" id="qG4t" style="max-width:100%;margin-top:26px;text-align:center"><p style="color:var(--muted);margin-bottom:14px" data-ru="📝 Тест: 4 вопроса">📝 Тест: 4 сұрақ</p><button class="cta" onclick="startQuiz(buildBank('sent'),'Сөйлем түрлері','qG4t')">Тестті бастау</button></div></div>
+</section>
+
+<section class="screen" id="s-logic">
+  <h2 class="sec-title">Логикалық сұрақтар</h2>
+  <p class="sec-sub" data-ru="Задания, развивающие мышление: сравнивать, находить закономерности и делать выводы.">Ойлауды, салыстыруды және қорытынды жасауды дамытатын тапсырмалар.</p>
+  <div class="gtabs">
+    <button class="on" onclick="gtab(this,'s-logic',0)" data-ru="🔢 Закономерности">🔢 Заңдылық</button>
+    <button onclick="gtab(this,'s-logic',1)" data-ru="🔍 Найди лишнее">🔍 Артығын тап</button>
+    <button onclick="gtab(this,'s-logic',2)" data-ru="🧠 Логические задачи">🧠 Қисынды есептер</button>
+  </div>
+
+  <div class="gtopic show"><div class="rule"><b class="tag">ЕРЕЖЕ</b><p data-ru="Заметьте, по какому закону меняются числа в ряду: они растут, уменьшаются на одно и то же число или удваиваются.">Қатардағы сандар қандай заңдылықпен өзгеретінін байқаңыз: олар бірдей мөлшерге артады, кемиді немесе еселенеді.</p><p class="ex" data-ru="2, 4, 6, 8 → каждое число растёт на 2 → следующее: 10">2, 4, 6, 8 → әр сан 2-ге артады → келесі: 10</p></div><div class="qbox" id="qL1" style="max-width:100%;margin-top:26px;text-align:center"><p style="color:var(--muted);margin-bottom:14px" data-ru="📝 Тест: 5 вопросов">📝 Тест: 5 сұрақ</p><button class="cta" onclick="startQuiz(buildBank('pat'),'Заңдылық','qL1')">Тестті бастау</button></div></div>
+
+  <div class="gtopic"><div class="rule"><b class="tag">ЕРЕЖЕ</b><p data-ru="Из нескольких слов найдите то, у которого нет общего признака с остальными.">Бірнеше сөздің ішінен басқаларына ортақ белгісі жоқ сөзді табыңыз.</p><p class="ex" data-ru="яблоко, груша, вишня, стол → лишний стол (остальные — фрукты)">алма, алмұрт, шие, үстел → үстел артық (қалғандары — жеміс)</p></div><div class="qbox" id="qL2" style="max-width:100%;margin-top:26px;text-align:center"><p style="color:var(--muted);margin-bottom:14px" data-ru="📝 Тест: 5 вопросов">📝 Тест: 5 сұрақ</p><button class="cta" onclick="startQuiz(buildBank('odd'),'Артығын тап','qL2')">Тестті бастау</button></div></div>
+
+  <div class="gtopic"><div class="rule"><b class="tag">ЕРЕЖЕ</b><p data-ru="Внимательно прочитайте условие, сравните данные и сделайте вывод.">Есептің шартын мұқият оқып, мәліметтерді салыстырыңыз да, қорытынды жасаңыз.</p><p class="ex" data-ru="Асан обогнал Серика → Асан впереди, Серик позади">Асан Серіктен озды → Асан алда, Серік артта</p></div><div class="qbox" id="qL3" style="max-width:100%;margin-top:26px;text-align:center"><p style="color:var(--muted);margin-bottom:14px" data-ru="📝 Тест: 5 вопросов">📝 Тест: 5 сұрақ</p><button class="cta" onclick="startQuiz(buildBank('task'),'Қисынды есептер','qL3')">Тестті бастау</button></div></div>
+</section>
+
+<!-- ============ GAME ============ -->
+<section class="screen" id="s-game">
+  <h2 class="sec-title">Ойын: «Әріптерді ретте»</h2>
+  <p class="sec-sub">Сабақ соңында көңілді жаттығу: шашыраған әріптерден сөз құрастырыңыз. Мұғалім оқушыларды кезекпен шақыра алады!</p>
+  <div class="game-wrap">
+    <div class="streak">
+      <div><span>Ұпай:</span> <b id="gScore">0</b></div>
+      <div><span>Дұрыс:</span> <b id="gGood">0</b></div>
+      <div><span>Келесі сөз:</span> <b id="gRound">1</b></div>
+    </div>
+    <div class="scramble" id="scramble"></div>
+    <input class="ginput" id="gInput" placeholder="Сөзді осында жазыңыз..." autocomplete="off">
+    <div class="game-msg" id="gMsg"></div>
+    <div class="fc-ctrl" style="justify-content:center">
+      <button class="cta" onclick="checkGuess()">Тексеру</button>
+      <button class="btn" onclick="nextWord(true)">Келесі сөз →</button>
+      <button class="btn gold" onclick="resetGame()">🔄 Жаңа ойын</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer><b>Sóz-Qazyna</b> · Бастауыш сыныпқа арналған қазақ тілі платформасы</footer>
+
+<script>
+/* ==================== ТІЛ / ЯЗЫК (kk ↔ ru) ==================== */
+let LANG='kk';try{LANG=localStorage.getItem('sq-lang')==='ru'?'ru':'kk'}catch(e){}
+const D={
+'БАСТАУЫШ СЫНЫП МҰҒАЛІМІНЕ АРНАЛҒАН':'ДЛЯ УЧИТЕЛЕЙ НАЧАЛЬНЫХ КЛАССОВ',
+'Басты бет':'Главная','Мәзір':'Меню','1-сынып':'1 класс','2-сынып':'2 класс','3-сынып':'3 класс','4-сынып':'4 класс','Ойын':'Игра',
+'Бастауыш сынып оқушыларына арналған қазақ тілі платформасы. Әр сыныпқа бөлек тақырыптар: ереже, интерактивті түсіндіру және сыныппен бірге орындалатын жаттығулар.':'Платформа казахского языка для учеников начальных классов. Отдельные темы для каждого класса: правило, интерактивное объяснение и упражнения для выполнения всем классом.',
+'💡 Мұғалімге: сол жақтағы ☰ мәзірін ашып, сыныпты таңдаңыз → ережені оқып, тапсырмаларды бірге орындаңыз. Тіркеусіз жұмыс істейді.':'💡 Учителю: откройте меню ☰ слева и выберите класс → прочитайте правило и выполните задания вместе. Работает без регистрации.',
+'Логикалық сұрақтар':'Логические вопросы',
+'ЕРЕЖЕ':'ПРАВИЛО',
+'Дыбыстар мен әріптерді тану, дауысты/дауыссыз дыбыстар, түстер, отбасы, апта күндері.':'Знакомство со звуками и буквами, гласные/согласные, цвета, семья, дни недели.',
+'Буындарды айыру, сандар 1–10, жануарлар, жыл мезгілдері, дене мүшелері.':'Деление на слоги, числа 1–10, животные, времена года, части тела.',
+'Көпше түр, қарама-қарсы сөздер, сандар 11–20, етістік шақтары, ай атаулары.':'Множественное число, антонимы, числа 11–20, времена глагола, названия месяцев.',
+'Септік жалғаулары, синонимдер, сөз табы, мақал-мәтелдер, сөйлем түрлері.':'Падежные окончания, синонимы, части речи, пословицы, типы предложений.',
+'🔤 Әліппе':'🔤 Алфавит','🗣️ Дауысты дыбыстар':'🗣️ Гласные звуки','🎨 Түстер':'🎨 Цвета',
+'✂️ Буын':'✂️ Слоги','🔢 Сандар 1–10':'🔢 Числа 1–10','🐾 Жануарлар':'🐾 Животные',
+'➕ Көпше түр':'➕ Множественное число','⚖️ Қарама-қарсы сөздер':'⚖️ Антонимы','🔢 Сандар 11–20':'🔢 Числа 11–20',
+'🏷️ Септік жалғаулары':'🏷️ Падежные окончания','💬 Синонимдер':'💬 Синонимы','🧩 Сөз табы':'🧩 Части речи',
+'Барлығы':'Все','Дауысты дыбыстар 🟢':'Гласные 🟢','Дауыссыз дыбыстар 🔵':'Согласные 🔵',
+'Қазақ әліпбиінде <b>42 әріп</b> бар. Әріп — дыбыстың таңбасы. Әріпті басып, онымен басталатын сөзді тыңдаңыз.':'В казахском алфавите <b>42 буквы</b>. Буква — знак звука. Нажмите на букву и послушайте слово, которое с неё начинается.',
+'Мысалы: Қ — қала, М — мектеп':'Например: Қ — қала (город), М — мектеп (школа)',
+'Дыбыстар екіге бөлінеді: <b style="color:var(--green)">дауысты</b> (ауа ұшынып, дауыс қатысады) және <b style="color:var(--teal2)">дауыссыз</b> дыбыстар.':'Звуки делятся на два вида: <b style="color:var(--green)">гласные</b> (голос проходит свободно) и <b style="color:var(--teal2)">согласные</b>.',
+'Дауысты: А, Ә, Е, И, О, Ө, У, Ұ, Ү, Ы, І — барлығы 11':'Гласные: А, Ә, Е, И, О, Ө, У, Ұ, Ү, Ы, І — всего 11',
+'Түстер — заттың сыртқы белгісі. Түсті басып, атауын тыңдаңыз.':'Цвет — внешний признак предмета. Нажмите на цвет и послушайте название.',
+'Мысалы: аспан — көк, күн — сары':'Например: аспан (небо) — көк (синий), күн (солнце) — сары (жёлтый)',
+'<b>Буын</b> — дыбыстың бір рет соғылғаннан пайда болатын бірлігі. Әр буында міндетті түрде бір дауысты дыбыс болады.':'<b>Слог</b> — часть слова, произносимая одним толчком воздуха. В каждом слоге обязательно есть один гласный звук.',
+'Сөзді басыңыз — ол буындарға бөлініп, дауыста оқылады:':'Нажмите на слово — оно разделится на слоги и будет озвучено:',
+'← Сөзді таңдаңыз':'← Выберите слово',
+'Сан есімдер заттың санын, ретін білдіреді. Санды басып, сөзбен тыңдаңыз.':'Числительные обозначают количество и порядок предметов. Нажмите на число и послушайте, как оно звучит словами.',
+'Мысалы: 5 — бес саусақ':'Например: 5 — бес саусақ (пять пальцев)',
+'Жануарлар атауларын карточкалар арқылы таныймыз. Карточканы бұраңыз.':'Знакомимся с названиями животных по карточкам. Переверните карточку.',
+'↻ Бұру үшін басыңыз':'↻ Нажмите, чтобы перевернуть','← Алдыңғы':'← Назад','Келесі →':'Далее →','🔊 Айту':'🔊 Произнести',
+'Заттың көп санын білдіретін түр — <b>көпше түр</b>. Сөз түбіне <b>-лар, -лер, -дар, -дер, -тар, -тер</b> жалғаулары қосылады.':'Форма, обозначающая множество предметов, — <b>множественное число</b>. К основе слова добавляются окончания <b>-лар, -лер, -дар, -дер, -тар, -тер</b>.',
+'Сөзді басыңыз — көпше түрі шығады:':'Нажмите на слово — появится форма множественного числа:',
+'📝 Жаттығу: 5 сұрақ':'📝 Упражнение: 5 вопросов','Тестті бастау':'Начать тест',
+'Мағынасы қарама-қарсы сөздер — <b>антонимдер</b>. Жұптарды табыңыз.':'Слова с противоположным значением — <b>антонимы</b>. Найдите пары.',
+'үлкен — кіші · жылдам — жай':'үлкен — кіші (большой — маленький) · жылдам — жай (быстрый — медленный)',
+'🔄 Қайта бастау':'🔄 Начать заново',
+'11–19 сандары «он» сөзі мен бірліктерді қосып айтылады.':'Числа 11–19 образуются из слова «он» (десять) и названия единиц.',
+'Іс-қимылдың кімге, нені, қайда, қашан қатысты екенін білдіретін жалғаулар — <b>септік жалғаулар</b>. Қазақ тілінде 7 септік бар.':'Окончания, показывающие, к кому, чему, где и когда относится действие, — <b>падежные окончания</b>. В казахском языке 7 падежей.',
+'Септік атауы':'Название падежа','Жалғауы':'Окончания','Сұрағы':'Вопросы','Мысал':'Пример',
+'Атау':'Именительный','жалғаусыз':'без окончания','Ілік':'Родительный','Барыс':'Дательный','Табыс':'Винительный','Жатыс':'Местный','Шығыс':'Исходный','Көмектес':'Творительный',
+'Кім? Не?':'Кто? Что?','Кімнің? Ненің?':'Чей? Чего?','Кімге? Неге?':'Кому? Чему?','Кімді? Нені?':'Кого? Что?','Кімде? Неде?':'У кого? В чём?','Кімнен? Неден?':'От кого? От чего?','Кіммен? Немен?':'С кем? Чем?',
+'📝 Бос орынды толтырыңыз: 5 сұрақ':'📝 Вставьте пропущенное окончание: 5 вопросов',
+'Мағынасы жақын, біріне-бірі алмастырыла алатын сөздер — <b>синонимдер</b>.':'Слова, близкие по значению, которые можно заменять друг другом, — <b>синонимы</b>.',
+'📝 Тест: 5 сұрақ':'📝 Тест: 5 вопросов',
+'Сөздер мағынасына қарай топтарға бөлінеді: <b>зат есім</b> (Не? Қайсы?), <b>сын есім</b> (Қандай?), <b>сан есім</b> (Қанша?), <b>етістік</b> (Не істеді?). Карточканы басып тексеріңіз.':'Слова делятся на группы по значению: <b>имя существительное</b> (Кто? Что?), <b>имя прилагательное</b> (Какой?), <b>имя числительное</b> (Сколько?), <b>глагол</b> (Что делал?). Нажмите на карточку, чтобы проверить.',
+'↻ Басыңыз':'↻ Нажмите','зат есім':'имя существительное','сын есім':'имя прилагательное','сан есім':'имя числительное','етістік':'глагол',
+'Не? Қайсы?':'Кто? Что?','Қандай?':'Какой?','Қанша?':'Сколько?','Не істеді?':'Что сделал?',
+'Ойын: «Әріптерді ретте»':'Игра: «Расставь буквы»',
+'Сабақ соңында көңілді жаттығу: шашыраған әріптерден сөз құрастырыңыз. Мұғалім оқушыларды кезекпен шақыра алады!':'Весёлое упражнение в конце урока: составьте слово из перемешанных букв. Учитель может вызывать учеников по очереди!',
+'Ұпай:':'Очки:','Дұрыс:':'Верно:','Келесі сөз:':'Слово №:','Тексеру':'Проверить','Келесі сөз →':'Следующее слово →','🔄 Жаңа ойын':'🔄 Новая игра',
+'<b>Sóz-Qazyna</b> · Бастауыш сыныпқа арналған қазақ тілі платформасы':'<b>Sóz-Qazyna</b> · Платформа казахского языка для начальных классов',
+'Шақ':'Время','Сөйлем түрі':'Вид предложения','Тыныс белгісі':'Знак препинания',
+'Көпше түр':'Множественное число','Септік жалғаулары':'Падежные окончания','Синонимдер':'Синонимы',
+'Етістік шақтары':'Времена глагола','Мақал-мәтел':'Пословицы','Сөйлем түрлері':'Типы предложений',
+'Заңдылық':'Закономерности','Артығын тап':'Найди лишнее','Қисынды есептер':'Логические задачи',
+'Аяқталды!':'Готово!','↺ Басынан':'↺ Заново','Дұрыс!':'Верно!','Қате, тағы көріңіз ✏️':'Неверно, попробуйте ещё ✏️',
+'Карточкаларды ашып, жұптарды табыңыз 👇':'Открывайте карточки и найдите пары 👇','Барлық жұп табылды! 🎉':'Все пары найдены! 🎉',
+'Сөзді осында жазыңыз...':'Напишите слово здесь...'
+};
+const T=s=>(LANG==='ru'&&D[s])||s;
+function walk(root){
+  const ru=LANG==='ru';
+  root.querySelectorAll('*').forEach(el=>{
+    if(el.tagName==='SCRIPT'||el.dataset.tk!==undefined)return;
+    if(el.dataset.kk===undefined){
+      const r=el.dataset.ru||D[el.innerHTML.trim()];
+      if(!r)return;
+      el.dataset.kk=el.innerHTML;el.dataset.ru=r;
+    }
+    el.innerHTML=ru?el.dataset.ru:el.dataset.kk;
+  });
+}
+function applyLang(){
+  const ru=LANG==='ru';
+  document.documentElement.lang=ru?'ru':'kk';
+  document.body.classList.toggle('ru',ru);
+  document.title=ru?'Sóz-Qazyna — Платформа для учителей начальных классов':'Sóz-Qazyna — Бастауыш сынып мұғаліміне арналған платформа';
+  walk(document.body);
+  document.querySelectorAll('[data-tk]').forEach(e=>e.textContent=T(e.dataset.tk));
+  document.getElementById('langBtn').textContent=ru?'🌐 Қазақша':'🌐 Русский';
+  document.getElementById('gInput').placeholder=T('Сөзді осында жазыңыз...');
+  if(QZ.qs.length&&document.querySelector('#'+QZ.el+' .qtext'))renderQ();
+}
+function toggleLang(){LANG=LANG==='kk'?'ru':'kk';try{localStorage.setItem('sq-lang',LANG)}catch(e){}applyLang()}
+function setInfo(k){const e=document.getElementById('mmInfo');e.dataset.tk=k;e.textContent=T(k)}
+
+/* ==================== НАВИГАЦИЯ ==================== */
+function toggleMenu(f){
+  const o=typeof f==='boolean'?f:!document.getElementById('side').classList.contains('open');
+  document.getElementById('side').classList.toggle('open',o);
+  document.getElementById('ovl').classList.toggle('show',o);
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')toggleMenu(false)});
+function go(id){
+  toggleMenu(false);
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s-'+id).classList.add('active');
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.s===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>go(b.dataset.s));
+function gtab(btn,gid,idx){
+  const root=document.getElementById(gid);
+  root.querySelectorAll('.gtopic').forEach((t,i)=>t.classList.toggle('show',i===idx));
+  const tabs=btn.parentElement.querySelectorAll('button');
+  tabs.forEach((b,i)=>b.classList.toggle('on',i===idx));
+}
+
+/* ==================== ДАУЫС ==================== */
+function speak(t){
+  try{
+    const u=new SpeechSynthesisUtterance(t);
+    u.lang='kk-KZ';u.rate=.82;
+    speechSynthesis.cancel();speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* ==================== ӘЛІППЕ (1-сынып) ==================== */
+const ALPHABET=[
+ ['А','алма',''],['Ә','әке','sp'],['Б','бала',''],['В','вагон',''],['Г','гүл',''],['Ғ','ғарыш','sp'],
+ ['Д','дос',''],['Е','ел',''],['Ё','ёлка',''],['Ж','жұлдыз',''],['З','заман',''],['И','идея',''],
+ ['Й','йод',''],['К','кітап',''],['Қ','қала','sp'],['Л','лебіз',''],['М','мектеп',''],['Н','нан',''],
+ ['Ң','аңыз','sp'],['О','орман',''],['Ө','өнер','sp'],['П','пияз',''],['Р','рахмет',''],['С','су',''],
+ ['Т','тау',''],['У','уақыт',''],['Ұ','ұшақ','sp'],['Ү','үш','sp'],['Ф','футбол',''],['Х','хал',''],
+ ['Һ','һақ','sp'],['Ц','цирк',''],['Ч','чемпион',''],['Ш','шөп',''],['Щ','щётка',''],
+ ['Ъ','объект',''],['Ы','ыдыс',''],['І','ілмек','sp'],['Ь','площадь',''],['Э','энергия',''],['Ю','юрист',''],['Я','янтарь','']
+];
+const VOWELS=['А','Ә','Е','И','О','Ө','У','Ұ','Ү','Ы','І'];
+function buildAlpha(elId){
+  const g=document.getElementById(elId);g.innerHTML='';
+  ALPHABET.forEach(a=>{
+    const d=document.createElement('div');
+    d.className='letter-card'+(a[2]==='sp'?' special':'');
+    d.dataset.l=a[0];
+    d.innerHTML='<span class="sound">🔊</span><div class="l">'+a[0]+'</div><div class="w">'+a[1]+'</div>';
+    d.onclick=()=>speak(a[1]);
+    g.appendChild(d);
+  });
+}
+buildAlpha('alphaG1');buildAlpha('alphaG1b');
+function vowMode(mode,btn){
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('#alphaG1b .letter-card').forEach(c=>{
+    c.classList.remove('dim','hi-v','hi-c');
+    if(mode==='all')return;
+    const isV=VOWELS.includes(c.dataset.l);
+    if(mode==='v'){isV?c.classList.add('hi-v'):c.classList.add('dim')}
+    else{isV?c.classList.add('dim'):c.classList.add('hi-c')}
+  });
+}
+
+/* ==================== ТҮСТЕР (1-сынып) ==================== */
+const COLORS=[['ақ','#f1f5f9'],['қара','#16181f'],['қызыл','#dc2626'],['көк','#2563eb'],['жасыл','#16a34a'],
+ ['сары','#facc15'],['қоңыр','#92400e'],['күлгін','#7c3aed'],['қызғылт','#ec4899'],['сұр','#9ca3af']];
+(function(){
+  const g=document.getElementById('colorGrid');
+  COLORS.forEach(c=>{
+    const d=document.createElement('div');
+    d.className='color-card';
+    d.innerHTML='<div class="sw" style="background:'+c[1]+'"></div><div class="nm">'+c[0]+'</div>';
+    d.onclick=()=>{speak(c[0]);d.classList.add('pop');setTimeout(()=>d.classList.remove('pop'),450)};
+    g.appendChild(d);
+  });
+})();
+
+/* ==================== БУЫН (2-сынып) ==================== */
+const SYLL=[['кітап',['кі','тап']],['бала',['ба','ла']],['мектеп',['мек','теп']],['мысық',['мы','сық']],
+ ['қала',['қа','ла']],['орман',['ор','ман']],['жұлдыз',['жұл','дыз']],['теңіз',['тең','із']],
+ ['қарындаш',['қа','рын','даш']],['қызғалдақ',['қыз','ғал','дақ']]];
+(function(){
+  const g=document.getElementById('syllBtns');
+  SYLL.forEach(w=>{
+    const b=document.createElement('button');
+    b.textContent=w[0];b.onclick=()=>showSyll(w);
+    g.appendChild(b);
+  });
+})();
+function showSyll(w){
+  const d=document.getElementById('syllOut');
+  d.innerHTML='';
+  w[1].forEach((s,i)=>{
+    const sp=document.createElement('span');
+    sp.className='syl';sp.style.animationDelay=(i*.2)+'s';sp.textContent=s;
+    d.appendChild(sp);
+  });
+  speak(w[0]);
+}
+
+/* ==================== САНДАР ==================== */
+function numGrid(elId,arr){
+  const g=document.getElementById(elId);
+  arr.forEach(n=>{
+    const d=document.createElement('div');
+    d.className='num-card';
+    d.innerHTML='<div class="n">'+n[0]+'</div><div class="w">'+n[1]+'</div>';
+    d.onclick=()=>speak(n[1]);
+    g.appendChild(d);
+  });
+}
+numGrid('numGrid1',[[1,'бір'],[2,'екі'],[3,'үш'],[4,'төрт'],[5,'бес'],[6,'алты'],[7,'жеті'],[8,'сегіз'],[9,'тоғыз'],[10,'он']]);
+numGrid('numGrid2',[[11,'он бір'],[12,'он екі'],[13,'он үш'],[14,'он төрт'],[15,'он бес'],[16,'он алты'],[17,'он жеті'],[18,'он сегіз'],[19,'он тоғыз'],[20,'жиырма']]);
+
+/* ==================== ЖАНУАРЛАР (2-сынып) ==================== */
+const ANIMALS=[['ит','собака','🐕'],['мысық','кошка','🐈'],['жылқы','лошадь','🐎'],['сиыр','корова','🐄'],
+ ['қой','овца','🐑'],['ешкі','коза','🐐'],['түйе','верблюд','🐫'],['қасқыр','волк','🐺'],
+ ['аю','медведь','🐻'],['түлкі','лиса','🦊'],['құс','птица','🐦'],['балық','рыба','🐟']];
+let ai=0;
+function renderA(){
+  const w=ANIMALS[ai];
+  document.getElementById('faKK').textContent=w[0];
+  document.getElementById('faEM').textContent=w[2];
+  document.getElementById('faRU').textContent='«'+w[1]+'»';
+  document.getElementById('faCnt').textContent=(ai+1)+' / '+ANIMALS.length;
+  document.getElementById('fcardA').classList.remove('flip');
+}
+function aNav(d){ai=(ai+d+ANIMALS.length)%ANIMALS.length;renderA()}
+renderA();
+
+/* ==================== КӨПШЕ ТҮР (3-сынып) ==================== */
+const PLURAL=[['қала','қалалар'],['ит','иттер'],['кітап','кітаптар'],['түйе','түйелер'],['ән','әндер'],
+ ['қол','қолдар'],['мектеп','мектептер'],['жұлдыз','жұлдыздар'],['бала','балалар'],['ауыл','ауылдар']];
+const PLURAL_OPT={'қалалар':['қалалар','қалалер','қалаттар'],'иттер':['иттер','итлар','иттар'],'кітаптар':['кітаптар','кітаплер','кітаплар'],
+ 'түйелер':['түйелер','түйелар','түйедер'],'әндер':['әндер','әнлер','әннер'],'қолдар':['қолдар','қоллар','қолтар'],
+ 'мектептер':['мектептер','мектептар','мекептер'],'жұлдыздар':['жұлдыздар','жұлдызлар','жұлдызтар'],'балалар':['балалар','балалер','баладар'],'ауылдар':['ауылдар','ауыллар','ауылтар']};
+(function(){
+  const g=document.getElementById('pluralBtns');
+  PLURAL.forEach(p=>{
+    const b=document.createElement('button');
+    b.textContent=p[0];b.onclick=()=>{
+      document.getElementById('pluralOut').innerHTML=
+        '<span>'+p[0]+'</span><span class="arrow">→</span><span class="res">'+p[1]+'</span>';
+      speak(p[1]);
+    };
+    g.appendChild(b);
+  });
+})();
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));const t=a[i];a[i]=a[j];a[j]=t}return a}
+function buildPluralQuiz(){
+  return shuffle([...PLURAL]).slice(0,5).map(p=>{
+    return mk('«'+p[0]+'» сөзінің көпше түрі:','Множественное число слова «'+p[0]+'»:',PLURAL_OPT[p[1]],null,0);
+  });
+}
+
+/* ==================== АНТОНИМДЕР (3-сынып) ==================== */
+const ANTON=[['үлкен','кіші'],['ұзын','қысқа'],['жылдам','жай'],['жақсы','жаман'],
+ ['алды','арты'],['жоғары','төмен'],['жуан','жіңішке'],['жарық','қараңғы']];
+let mm={open:[],done:0,lock:false};
+function startMM(){
+  mm={open:[],done:0,lock:false};
+  const deck=[];
+  ANTON.forEach((p,i)=>{deck.push({w:p[0],k:i});deck.push({w:p[1],k:i})});
+  shuffle(deck);
+  const g=document.getElementById('mmGrid');g.innerHTML='';
+  setInfo('Карточкаларды ашып, жұптарды табыңыз 👇');
+  deck.forEach(c=>{
+    const d=document.createElement('div');
+    d.className='mm-card';d.dataset.k=c.k;d.dataset.w=c.w;
+    d.innerHTML='<span>?</span>';
+    d.onclick=()=>mmFlip(d);
+    g.appendChild(d);
+  });
+}
+function mmFlip(d){
+  if(mm.lock||d.classList.contains('open')||d.classList.contains('found'))return;
+  d.classList.add('open');d.querySelector('span').textContent=d.dataset.w;speak(d.dataset.w);
+  mm.open.push(d);
+  if(mm.open.length===2){
+    mm.lock=true;
+    const a=mm.open[0],b=mm.open[1];
+    if(a.dataset.k===b.dataset.k&&a.dataset.w!==b.dataset.w){
+      setTimeout(()=>{
+        a.classList.add('found');b.classList.add('found');
+        mm.open=[];mm.lock=false;mm.done++;
+        if(mm.done===ANTON.length){confetti(80);setInfo('Барлық жұп табылды! 🎉')}
+      },350);
+    }else{
+      setTimeout(()=>{
+        mm.open.forEach(x=>{x.classList.remove('open');x.querySelector('span').textContent='?'});
+        mm.open=[];mm.lock=false;
+      },850);
+    }
+  }
+}
+startMM();
+
+/* ==================== СЕПТІК ТЕСТ (4-сынып) ==================== */
+const CASE_RAW=[
+ {q:'Мен мектеп___ барамын.',opts:['мектепке','мектепті','мектепте'],correct:0},
+ {q:'Айгүл мектеп___ оқиды.',opts:['мектепте','мекепке','мекептен'],correct:0},
+ {q:'Мен ән___ тыңдадым.',opts:['әнді','әнде','әнге'],correct:0},
+ {q:'Досым үй___ келді.',opts:['үйден','үйде','үйге'],correct:0},
+ {q:'Мұғалім оқушы___ сұрады.',opts:['оқушыдан','оқушыны','оқушыда'],correct:0}
+];
+function buildCaseQuiz(){return CASE_RAW.map(x=>mk(x.q,null,x.opts,null,x.correct))}
+
+/* ==================== СИНОНИМДЕР (4-сынып) ==================== */
+const SYN=[['жылдам','тез',['тез','жай','қатты','биік']],['әдемі','сұлу',['сұлу','терең','ұзын','қатты']],
+ ['қуаныш','шаттық',['шаттық','қорқыныш','жасырын','тынды']],['дос','жолдас',['жолдас','жау','жат','бәсекелес']],
+ ['ақылды','зерек',['зерек','мәңгі','жуан','тыныш']],['қорқыныш','үрей',['үрей','батылдық','махаббат','даналық']]];
+function buildSynQuiz(){
+  return shuffle([...SYN]).slice(0,5).map(p=>{
+    return mk('«'+p[0]+'» сөзінің синонимі:','Синоним к слову «'+p[0]+'»:',p[2],null,0);
+  });
+}
+
+/* ==================== СӨЗ ТАБЫ (4-сынып) ==================== */
+const WCLASS=[['кітап','зат есім','Не? Қайсы?'],['аспан','зат есім','Не? Қайсы?'],['үлкен','сын есім','Қандай?'],
+ ['қызыл','сын есім','Қандай?'],['жылдам','сын есім','Қандай?'],['бес','сан есім','Қанша?'],
+ ['он','сан есім','Қанша?'],['оқу','етістік','Не істеді?'],['ұшу','етістік','Не істеді?'],['жүгіру','етістік','Не істеді?']];
+(function(){
+  const g=document.getElementById('wcGrid');
+  WCLASS.forEach(w=>{
+    const d=document.createElement('div');
+    d.className='fcard sm';
+    d.innerHTML='<div class="fc-in"><div class="face front"><div class="kk">'+w[0]+'</div><div class="hint">↻ Басыңыз</div></div>'+
+      '<div class="face back"><div class="cls">'+w[1]+'</div><div style="color:var(--muted);font-size:12px;margin-top:6px">'+w[2]+'</div></div></div>';
+    d.onclick=()=>d.classList.toggle('flip');
+    g.appendChild(d);
+  });
+})();
+
+/* ==================== СӨЗ КАРТОЧКАЛАРЫ (жаңа тақырыптар) ==================== */
+function wordGrid(id,items){
+  const g=document.getElementById(id);
+  items.forEach(w=>{
+    const d=document.createElement('div');d.className='wcard';
+    d.innerHTML=(w[2]?'<div class="em">'+w[2]+'</div>':'')+'<div class="k">'+w[0]+'</div><div class="r">'+w[1]+'</div>';
+    d.onclick=()=>speak(w[0]);g.appendChild(d);
+  });
+}
+wordGrid('famG',[['ата','дедушка','👴'],['әже','бабушка','👵'],['әке','папа','👨'],['ана','мама','👩'],['аға','старший брат','👦'],['апа','старшая сестра','👧'],['іні','младший брат','🧒'],['қарындас','младшая сестра','👶']]);
+wordGrid('dayG',[['дүйсенбі','понедельник','1'],['сейсенбі','вторник','2'],['сәрсенбі','среда','3'],['бейсенбі','четверг','4'],['жұма','пятница','5'],['сенбі','суббота','6'],['жексенбі','воскресенье','7']]);
+wordGrid('seaG',[['көктем','весна','🌱'],['жаз','лето','☀️'],['күз','осень','🍂'],['қыс','зима','❄️']]);
+wordGrid('bodyG',[['бас','голова','🙂'],['көз','глаз','👁️'],['құлақ','ухо','👂'],['мұрын','нос','👃'],['ауыз','рот','👄'],['қол','рука','✋'],['аяқ','нога','🦶'],['тіс','зуб','🦷']]);
+wordGrid('monG',[['қаңтар','январь','1'],['ақпан','февраль','2'],['наурыз','март','3'],['сәуір','апрель','4'],['мамыр','май','5'],['маусым','июнь','6'],['шілде','июль','7'],['тамыз','август','8'],['қыркүйек','сентябрь','9'],['қазан','октябрь','10'],['қараша','ноябрь','11'],['желтоқсан','декабрь','12']]);
+
+/* ==================== ЛОГИКА + ЖАҢА ТЕСТТЕР ==================== */
+const TN=['өткен шақ','осы шақ','келер шақ'],TNr=['прошедшее время','настоящее время','будущее время'];
+const SN=['хабарлы','сұраулы','лепті'],SNr=['повествовательное','вопросительное','восклицательное'];
+const SEQ=(k,o,c)=>['Қатарды жалғастыр: '+k+', ?','Продолжи ряд: '+k+', ?',o,null,c];
+const ODD=(w,r,c)=>['Қайсысы артық? '+w.join(', '),'Что лишнее? '+r.join(', '),w,r,c];
+const LB={
+ pat:[SEQ('2, 4, 6, 8',['9','10','12'],1),SEQ('5, 10, 15, 20',['22','25','30'],1),SEQ('1, 3, 5, 7',['8','9','11'],1),
+  SEQ('1, 2, 4, 8',['12','14','16'],2),SEQ('20, 18, 16, 14',['10','12','13'],1),SEQ('3, 6, 9, 12',['14','15','18'],1)],
+ odd:[ODD(['алма','алмұрт','шие','үстел'],['яблоко','груша','вишня','стол'],3),ODD(['ит','мысық','жылқы','қарындаш'],['собака','кошка','лошадь','карандаш'],3),
+  ODD(['қызыл','көк','жасыл','кітап'],['красный','синий','зелёный','книга'],3),ODD(['бір','екі','үш','сары'],['один','два','три','жёлтый'],3),
+  ODD(['үстел','орындық','төсек','қарға'],['стол','стул','кровать','ворона'],3),ODD(['көктем','жаз','дүйсенбі','қыс'],['весна','лето','понедельник','зима'],2)],
+ task:[['Асан Серіктен озды, ал Серік Айдардан озды. Кім ең соңғы болып келді?','Асан обогнал Серика, а Серик обогнал Айдара. Кто пришёл последним?',['Асан','Серік','Айдар'],['Асан','Серик','Айдар'],2],
+  ['Бүгін сәрсенбі. Ертең қай күн?','Сегодня среда. Какой день завтра?',['сейсенбі','бейсенбі','жұма'],['вторник','четверг','пятница'],1],
+  ['Үйде 4 мысық бар. Әр мысықтың 4 аяғы бар. Барлығы неше аяқ?','В доме 4 кошки. У каждой кошки 4 лапы. Сколько всего лап?',['8','12','16'],null,2],
+  ['Қыркүйек, қазан, қараша — қай жыл мезгілі?','Сентябрь, октябрь, ноябрь — какое это время года?',['көктем','күз','қыс'],['весна','осень','зима'],1],
+  ['Бір қорапта 5 қарындаш бар. 3 қорапта неше қарындаш бар?','В одной коробке 5 карандашей. Сколько карандашей в 3 коробках?',['8','10','15'],null,2],
+  ['Айгүлдің 7 алмасы бар. Ол 3 алманы жеді. Неше алма қалды?','У Айгуль 7 яблок. Она съела 3 яблока. Сколько яблок осталось?',['3','4','5'],null,1]],
+ tense:[['«Кеше мен мектепке бардым.» Бұл қай шақ?','«Вчера я ходил в школу.» Какое это время?',TN,TNr,0],
+  ['«Ол қазір сурет салып жатыр.» Бұл қай шақ?','«Он сейчас рисует.» Какое это время?',TN,TNr,1],
+  ['«Біз жазда теңізге бармақпыз.» Бұл қай шақ?','«Летом мы собираемся на море.» Какое это время?',TN,TNr,2],
+  ['«Апам нан пісірді.» Бұл қай шақ?','«Бабушка испекла хлеб.» Какое это время?',TN,TNr,0]],
+ prov:[['Мақалды аяқтаңыз: Білекті бірді жығады, ___ мыңды жығады.','Закончите пословицу: Білекті бірді жығады, ___ мыңды жығады.',['білімді','ақшалы','қарулы'],null,0],
+  ['Мақалды аяқтаңыз: Жеті рет өлшеп, бір рет ___.','Закончите пословицу: Жеті рет өлшеп, бір рет ___.',['кес','таста','ойна'],null,0],
+  ['Мақалды аяқтаңыз: Еңбек түбі — ___.','Закончите пословицу: Еңбек түбі — ___.',['береке','жалқаулық','ұйқы'],null,0],
+  ['Мақалды аяқтаңыз: Бірлік бар жерде — ___ бар.','Закончите пословицу: Бірлік бар жерде — ___ бар.',['тірлік','ұрыс','қорқыныш'],null,0],
+  ['Мақалды аяқтаңыз: Жақсы сөз — жарым ___.','Закончите пословицу: Жақсы сөз — жарым ___.',['ырыс','нан','ақша'],null,0]],
+ sent:[['«Қандай әдемі гүл!» — сөйлем түрі:','«Қандай әдемі гүл!» — вид предложения:',SN,SNr,2],
+  ['«Сен қайда барасың?» — сөйлем түрі:','«Сен қайда барасың?» — вид предложения:',SN,SNr,1],
+  ['«Мен мектепке барамын.» — сөйлем түрі:','«Мен мектепке барамын.» — вид предложения:',SN,SNr,0],
+  ['«Қайырлы таң!» — сөйлем түрі:','«Қайырлы таң!» — вид предложения:',SN,SNr,2]]
+};
+function buildBank(k){return shuffle(LB[k].map(a=>mk(a[0],a[1],a[2],a[3],a[4]))).slice(0,5)}
+
+/* ==================== ТЕСТ ҚОЗҒАЛТҚЫШЫ ==================== */
+function mk(k,r,o,ro,c){const ix=shuffle(o.map((_,i)=>i));return{q:k,r:r,opts:ix.map(i=>o[i]),ro:ro&&ix.map(i=>ro[i]),correct:ix.indexOf(c)}}
+let QZ={qs:[],i:0,score:0,title:'',el:'qG3',start:''};
+function startQuiz(qs,title,elId){
+  QZ={qs:qs,i:0,score:0,title:title,el:elId,start:document.getElementById(elId).innerHTML};
+  renderQ();
+}
+function resetQuiz(){document.getElementById(QZ.el).innerHTML=QZ.start;QZ.qs=[];applyLang()}
+function renderQ(){
+  const ru=LANG==='ru',area=document.getElementById(QZ.el);
+  if(QZ.i>=QZ.qs.length){
+    const pct=Math.round(QZ.score/QZ.qs.length*100);
+    area.innerHTML='<div class="big-result"><h3 data-tk="Аяқталды!">'+T('Аяқталды!')+'</h3><div class="num">'+QZ.score+' / '+QZ.qs.length+'</div>'+
+      '<p style="color:var(--muted);margin:8px 0 18px">«<span data-tk="'+QZ.title+'">'+T(QZ.title)+'</span>» · '+pct+'%</p>'+
+      '<button class="cta" data-tk="↺ Басынан" onclick="resetQuiz()">'+T('↺ Басынан')+'</button></div>';
+    if(pct>=80)confetti(60);
+    return;
+  }
+  const q=QZ.qs[QZ.i],os=ru&&q.ro?q.ro:q.opts;
+  let h='<div class="qmeta">'+T(QZ.title)+' · '+(ru?'вопрос ':'сұрақ ')+(QZ.i+1)+'/'+QZ.qs.length+' · '+(ru?'Баллы: ':'Ұпай: ')+QZ.score+'</div>'+
+    '<div class="qtext">'+(ru&&q.r?q.r:q.q)+'</div><div class="opts">';
+  os.forEach((o,i)=>{h+='<button class="opt" onclick="answerQ('+i+',this)">'+String.fromCharCode(1040+i)+') '+o+'</button>'});
+  area.innerHTML=h+'</div>';
+}
+function answerQ(i,btn){
+  const q=QZ.qs[QZ.i];
+  document.querySelectorAll('#'+QZ.el+' .opt').forEach((b,bi)=>{b.disabled=true;if(bi===q.correct)b.classList.add('ok')});
+  if(i===q.correct){QZ.score++}else btn.classList.add('bad');
+  setTimeout(()=>{QZ.i++;renderQ()},900);
+}
+
+/* ==================== ОЙЫН ==================== */
+const GWORDS=['кітап','қала','бала','мектеп','ауыл','орман','қасқыр','жұлдыз','гүлдер','теңіз','қарындаш','мұғалім','достар','ақыл','жауап'];
+let game={score:0,good:0,round:1,word:'',tries:0};
+function nextWord(skip){
+  if(skip&&game.tries===0&&game.word){game.round++}
+  game.word=GWORDS[Math.floor(Math.random()*GWORDS.length)];
+  game.tries=0;
+  let scr=game.word.split('');
+  for(let t=0;t<8;t++){scr=shuffle([...game.word]);if(scr.join('')!==game.word)break}
+  const sc=document.getElementById('scramble');
+  sc.innerHTML='';
+  scr.forEach((ch,i)=>{
+    const d=document.createElement('div');
+    d.className='tile'+(i%2?' t2':'');
+    d.style.animationDelay=(i*.06)+'s';
+    d.textContent=ch.toUpperCase();
+    sc.appendChild(d);
+  });
+  document.getElementById('gInput').value='';
+  const m=document.getElementById('gMsg');m.textContent='';m.className='game-msg';
+  document.getElementById('gRound').textContent=game.round;
+}
+function updGameUI(){
+  document.getElementById('gScore').textContent=game.score;
+  document.getElementById('gGood').textContent=game.good;
+}
+function checkGuess(){
+  const v=document.getElementById('gInput').value.trim().toLowerCase();
+  const m=document.getElementById('gMsg');
+  if(!v)return;
+  game.tries++;
+  if(v===game.word.toLowerCase()){
+    game.good++;game.score+=Math.max(5,15-(game.tries-1)*5);
+    m.textContent=T('Дұрыс!')+' «'+game.word+'» 👏';m.className='game-msg good';
+    updGameUI();
+    setTimeout(()=>{game.round++;nextWord(false)},1100);
+  }else{
+    game.score=Math.max(0,game.score-2);
+    m.textContent=T('Қате, тағы көріңіз ✏️');m.className='game-msg err';
+    updGameUI();
+  }
+}
+function resetGame(){game={score:0,good:0,round:1,word:'',tries:0};updGameUI();nextWord(false)}
+document.getElementById('gInput').addEventListener('keydown',e=>{if(e.key==='Enter')checkGuess()});
+nextWord(false);
+
+/* ==================== CONFETTI ==================== */
+function confetti(n){
+  const colors=['#f0b429','#2dd4bf','#f87171','#8b5cf6','#4ade80','#ffd97a'];
+  for(let i=0;i<n;i++){
+    const d=document.createElement('div');
+    d.className='confetti';
+    d.style.left=Math.random()*100+'vw';
+    d.style.background=colors[i%colors.length];
+    d.style.animationDuration=(1.6+Math.random()*1.6)+'s';
+    d.style.animationDelay=(Math.random()*.5)+'s';
+    d.style.borderRadius=Math.random()>.5?'50%':'2px';
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(),3600);
+  }
+}
+function newQuotes(){
+  const g=document.querySelector('.quote-grid');
+  const c=shuffle([...g.children]);
+  c.forEach((x,i)=>{x.style.display=i<3?'':'none';g.appendChild(x)});
+}
+newQuotes();
+applyLang();
+</script>
+</body>
+</html>
